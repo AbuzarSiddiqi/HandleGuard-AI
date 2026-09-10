@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HandleGuard AI — Enterprise Warehouse Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <div class="logo">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L3 6.5V12c0 5 3.8 8.6 9 10 5.2-1.4 9-5 9-10V6.5L12 2z" fill="#e2231a"/>
+        <path d="M12 6.2l-5 2.4v3.2c0 3.4 2.2 5.9 5 6.9 2.8-1 5-3.5 5-6.9V8.6l-5-2.4z" fill="#ffffff" opacity=".95"/>
+        <path d="M8.6 12.1h6.8M12 8.7v6.8" stroke="#e2231a" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="brand-text">
+      <div class="brand-name">HandleGuard <span class="brand-pill">AI</span></div>
+      <div class="brand-sub">Enterprise Damage-Free Material Handling Intelligence</div>
+    </div>
+  </div>
+
+  <nav class="tabs" id="tabs">
+    <button class="tab active" data-view="live">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+      Live Stream
+    </button>
+    <button class="tab" data-view="events">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      Incident Events
+    </button>
+    <button class="tab" data-view="dashboard">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+      Operations KPIs
+    </button>
+    <button class="tab" data-view="assistant">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+      AI Supervisor
+    </button>
+    <button class="tab" data-view="insights">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+      Prevention &amp; SOP
+    </button>
+    <button class="tab" data-view="responsible">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      Governance
+    </button>
+  </nav>
+
+  <div class="top-right">
+    <div class="control-badge">
+      <span class="badge-lbl">Bay</span>
+      <select id="baySelect" class="clean-select">
+        <option>Bay 1</option>
+        <option>Bay 2</option>
+        <option>Bay 3</option>
+      </select>
+    </div>
+    <button id="privacyToggle" class="ghost-btn" title="Toggle real-time worker anonymization">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l7 3v5c0 4.4-3 8.4-7 9.6C8 19.4 5 15.4 5 11V6l7-3z"/></svg>
+      <span>Privacy Mode</span>
+    </button>
+    <a href="slides.html" target="_blank" class="ghost-btn" style="text-decoration:none" title="Open Executive Presentation Deck">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+      <span>Pitch Deck</span>
+    </a>
+    <div class="model-status" id="modelStatus">
+      <span class="dot loading"></span>
+      <span id="modelStatusText">Loading Vision Engine...</span>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- ============ LIVE ANALYSIS ============ -->
+  <section class="view active" id="view-live">
+    <div class="live-grid">
+      <div class="panel stage-panel">
+        <div class="source-bar">
+          <label class="btn primary upload-btn" for="videoFile">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M17 8l-5-5-5 5M12 3v12"/></svg>
+            <span>Upload Video</span>
+            <input type="file" id="videoFile" accept="video/mp4,video/webm,video/quicktime,video/*" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0;">
+          </label>
+
+          <div class="synth-ctl">
+            <div class="custom-select-wrap">
+              <select id="sampleSelect">
+                <option value="">Pilot sample clips (real CCTV)...</option>
+              </select>
+            </div>
+            <button id="btnLoadSample" class="btn secondary">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              Load Sample
+            </button>
+          </div>
+
+          <div class="synth-ctl">
+            <div class="custom-select-wrap">
+              <select id="scenarioSelect">
+                <option value="">Synthetic demo: pick scenario...</option>
+              </select>
+            </div>
+            <button id="btnStartScenario" class="btn secondary">Run</button>
+            <button id="btnRunAll" class="btn secondary highlight">Full Demo (12)</button>
+          </div>
+
+          <div class="source-actions">
+            <button id="btnRecord" class="btn ghost">Record</button>
+            <button id="btnWebcam" class="btn ghost">Webcam</button>
+          </div>
+
+          <div class="src-pill">
+            <span class="src-dot"></span>
+            <span class="src-name" id="srcName">No active source</span>
+          </div>
+        </div>
+
+        <div class="stage-wrap">
+          <div class="cctv-hud" id="cctvHud">
+            <div class="cctv-hud-left">
+              <span class="hud-rec-badge"><span class="hud-rec-dot"></span>LIVE</span>
+              <span class="hud-cam-id" id="hudCamTag">CAM 01 // DOCK BAY 1</span>
+              <span class="hud-dim">|</span>
+              <span class="hud-telemetry">1080P · 30 FPS</span>
+            </div>
+            <div class="cctv-hud-right">
+              <span class="hud-ai-chip"><span class="hud-chip-dot"></span>COCO-SSD + FLOW</span>
+              <span class="hud-time" id="hudClock">10:25:00</span>
+            </div>
+          </div>
+
+          <canvas id="stage" width="960" height="540"></canvas>
+          <div class="replay-badge" id="replayBadge" hidden>REPLAY ACTIVE</div>
+          <div class="stage-empty" id="stageEmpty">
+            <div class="se-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+            </div>
+            <h3>Feed Inactive</h3>
+            <p>Select a CCTV pilot clip above, upload warehouse footage,<br>or launch a simulated scenario to initiate AI behaviour telemetry.</p>
+          </div>
+        </div>
+
+        <div class="transport">
+          <button id="btnPlayPause" class="icon-btn" disabled title="Play / Pause">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+          </button>
+          <div class="timeline-wrap">
+            <div class="timeline"><div id="tlFill"></div></div>
+          </div>
+          <span class="tc" id="timecode">00:00</span>
+          <div class="engine-stats" id="engineStats">Engine Idle</div>
+        </div>
+
+        <div class="ticker" id="ticker">
+          <span class="tick-dot"></span>
+          <span class="ticker-text">Standby — Monitoring loading bay telemetry...</span>
+        </div>
+      </div>
+
+      <div class="side-col">
+        <div class="panel session-panel">
+          <div class="panel-h">
+            <span>Shift Intelligence Session</span>
+            <span class="panel-pill">Real-time</span>
+          </div>
+          <div class="sev-chips" id="sevChips"></div>
+          <div class="sess-actions">
+            <button id="btnExport" class="btn ghost small">Export JSON Audit</button>
+            <button id="btnClear" class="btn ghost small danger">Clear Events</button>
+          </div>
+        </div>
+
+        <div class="panel feed-panel">
+          <div class="panel-h">
+            <span>Live Incident Stream</span>
+            <span class="pulse-beacon"></span>
+          </div>
+          <div class="feed" id="liveFeed">
+            <div class="empty-note">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+              <span>Vision pipeline active. Verified handling violations will stream here in real time.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EVENTS ============ -->
+  <section class="view" id="view-events">
+    <div class="view-head">
+      <div>
+        <h2>Detected Incident Evidence Log</h2>
+        <p>Every logged incident carries timestamped optical evidence, forensic kinematics, and single-click video replay.</p>
+      </div>
+    </div>
+    <div class="filters">
+      <div class="chip-row" id="sevFilter"></div>
+      <div class="filter-controls">
+        <select id="filterBay" class="clean-select">
+          <option value="">All Cameras</option>
+          <option>Bay 1</option>
+          <option>Bay 2</option>
+          <option>Bay 3</option>
+        </select>
+        <div class="search-input-wrap">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <input id="filterSearch" type="search" placeholder="Search violation, product, bay...">
+        </div>
+      </div>
+    </div>
+    <div class="event-grid" id="eventGrid"></div>
+  </section>
+
+  <!-- ============ DASHBOARD ============ -->
+  <section class="view" id="view-dashboard">
+    <div class="view-head">
+      <div>
+        <h2>Shift Operations &amp; Handling Quality</h2>
+        <p>Executive shift overview across all dock cameras — engineered for morning supervisor briefings and QA sign-off.</p>
+      </div>
+    </div>
+    <div class="kpi-row" id="kpiRow"></div>
+    <div class="chart-grid">
+      <div class="panel chart-panel wide"><div class="panel-h">Incident Trajectory Timeline</div><div id="chartTimeline"></div></div>
+      <div class="panel chart-panel"><div class="panel-h">Handling Risk Severity Mix</div><div id="chartSeverity"></div></div>
+      <div class="panel chart-panel"><div class="panel-h">Violation Distribution by Taxonomy</div><div id="chartBehaviours"></div></div>
+      <div class="panel chart-panel"><div class="panel-h">Risk Intensity by Camera Bay</div><div id="chartBays"></div></div>
+      <div class="panel chart-panel"><div class="panel-h">Handling Discipline (Compliant vs Risky)</div><div id="chartGoodBad"></div></div>
+      <div class="panel chart-panel wide"><div class="panel-h">Automated Shift Telemetry Briefing</div><div id="shiftSummary" class="summary-text"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ ASSISTANT ============ -->
+  <section class="view" id="view-assistant">
+    <div class="view-head">
+      <div>
+        <h2>AI Supervisor Operations Copilot</h2>
+        <p>Grounded directly in the visual evidence captured by the neural pipeline — answering strictly from verifiable telemetry.</p>
+      </div>
+    </div>
+    <div class="chat-wrap panel">
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-chips" id="chatChips"></div>
+      <form class="chat-input" id="chatForm">
+        <input id="chatText" type="text" placeholder="Inquire about recorded handling incidents, high-risk bays, or corrective actions..." autocomplete="off">
+        <button class="btn primary" type="submit">
+          <span>Query</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </form>
+    </div>
+  </section>
+
+  <!-- ============ INSIGHTS ============ -->
+  <section class="view" id="view-insights">
+    <div class="view-head">
+      <div>
+        <h2>Insights &amp; Root-Cause Prevention</h2>
+        <p>Moving from reactive detection to proactive damage prevention: recurring coaching focus and standard operating playbooks.</p>
+      </div>
+    </div>
+    <div class="insight-grid">
+      <div class="panel"><div class="panel-h">Recurring Violations (Coaching Priority)</div><div id="insightRecurring"></div></div>
+      <div class="panel"><div class="panel-h">Critical Risk Locations</div><div id="insightLocations"></div></div>
+      <div class="panel"><div class="panel-h">Targeted Workforce Training Plan</div><div id="insightTraining"></div></div>
+      <div class="panel"><div class="panel-h">Standard Operating Procedure (SOP) Playbook</div><div id="insightPlaybook" class="playbook"></div></div>
+    </div>
+  </section>
+
+  <!-- ============ RESPONSIBLE AI ============ -->
+  <section class="view" id="view-responsible">
+    <div class="view-head">
+      <div>
+        <h2>Responsible AI &amp; Ethical Governance</h2>
+        <p>Engineered to optimize handling processes and protect assets — strictly preserving worker dignity and operational transparency.</p>
+      </div>
+    </div>
+    <div class="resp-grid">
+      <div class="panel resp-card">
+        <h4>Privacy by Design</h4>
+        <p>Real-time optical blurring pixelates operator faces and identifying features on stream and in snapshots. Video data never leaves premises.</p>
+      </div>
+      <div class="panel resp-card">
+        <h4>Data Minimization &amp; Retention</h4>
+        <p>Only event metadata and low-resolution evidence clips are retained. Continuous video stream is immediately discarded from memory.</p>
+        <label class="slider-row">Audit Retention Window: <span id="retentionVal">30</span> days
+          <input type="range" id="retentionSlider" min="7" max="90" value="30">
+        </label>
+      </div>
+      <div class="panel resp-card">
+        <h4>Human-in-the-Loop Review</h4>
+        <p>The system distinguishes <em>observed kinematics</em> &rarr; <em>potential risk</em> &rarr; <em>confirmed damage</em>. High/Critical alerts route to human supervisors.</p>
+      </div>
+      <div class="panel resp-card">
+        <h4>Non-Punitive Process Coaching</h4>
+        <p>Telemetry tracks process efficiency and ergonomics, not individual employee surveillance. Output drives equipment allocation and training.</p>
+      </div>
+      <div class="panel resp-card">
+        <h4>Role-Based Access Governance</h4>
+        <table class="roles">
+          <tr><th>Role</th><th>Live Telemetry</th><th>Incident Replay</th><th>Identity Data</th></tr>
+          <tr><td>Supervisor</td><td>Full Dock</td><td>Full Replay</td><td>Masked</td></tr>
+          <tr><td>Team Lead</td><td>Assigned Bay</td><td>Evidence Snippet</td><td>Masked</td></tr>
+          <tr><td>QA Auditor</td><td>Statistical KPIs</td><td>Audit Log</td><td>Anonymized</td></tr>
+        </table>
+      </div>
+      <div class="panel resp-card">
+        <h4>Explainability &amp; Supervisor Feedback</h4>
+        <p>Every score lists explicit kinematic factors. Supervisor feedback tunes confidence thresholds continuously.</p>
+        <div class="fb-row">
+          <button class="btn ghost small" id="fbConfirm">Confirm Incident</button>
+          <button class="btn ghost small" id="fbDismiss">Mark False Positive</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span>HandleGuard AI — Enterprise Autonomous Warehouse Handling &amp; In-Transit Damage Prevention System.</span>
+    <span class="footer-badge">Enterprise v1.2</span>
+  </div>
+</footer>
+
+<video id="video" playsinline muted style="position:fixed;top:-9999px;left:-9999px;width:1px;height:1px;opacity:0;pointer-events:none;"></video>
+
+<script src="vendor/tf.min.js"></script>
+<script src="vendor/coco-ssd.min.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
